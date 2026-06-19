@@ -7,7 +7,7 @@ Portable Oh My Zsh + Powerlevel10k configuration with cross-platform aliases, pl
 ### One-liner (curl | sh)
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/alivinshiva/zsh-setup/master/install.sh | sh
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/alivinshiva/zsh-setup/master/install.sh)"
 ```
 
 ### Clone + run
