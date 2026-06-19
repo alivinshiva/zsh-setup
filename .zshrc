@@ -18,6 +18,7 @@ export VISUAL='nvim'
 # Colors
 export CLICOLOR=1
 export BAT_THEME="Dracula"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 # Platform-specific setup
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -29,6 +30,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
   fi
   ZSH_AUTOSUGGEST_PATH="$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
   ZSH_SYNTAX_HIGHLIGHTING_PATH="$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  FZF_KEY_BINDINGS="$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
+  FZF_COMPLETION="$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"
 
   if command -v gdircolors >/dev/null 2>&1; then
     eval "$(gdircolors -b)" 2>/dev/null
@@ -36,6 +39,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
 else
   ZSH_AUTOSUGGEST_PATH="/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
   ZSH_SYNTAX_HIGHLIGHTING_PATH="/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  FZF_KEY_BINDINGS="/usr/share/fzf/key-bindings.zsh"
+  FZF_COMPLETION="/usr/share/fzf/completion.zsh"
   eval "$(dircolors -b)" 2>/dev/null
 fi
 
@@ -122,6 +127,10 @@ fi
 
 # zsh-autosuggestions (loads after p10k)
 [[ -f "$ZSH_AUTOSUGGEST_PATH" ]] && source "$ZSH_AUTOSUGGEST_PATH"
+
+# fzf key bindings (Ctrl+R, Ctrl+T, Alt+C)
+[[ -f "$FZF_KEY_BINDINGS" ]] && source "$FZF_KEY_BINDINGS"
+[[ -f "$FZF_COMPLETION" ]] && source "$FZF_COMPLETION"
 
 # zsh-syntax-highlighting — must be loaded last
 [[ -f "$ZSH_SYNTAX_HIGHLIGHTING_PATH" ]] && source "$ZSH_SYNTAX_HIGHLIGHTING_PATH"

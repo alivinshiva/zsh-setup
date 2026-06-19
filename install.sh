@@ -45,6 +45,8 @@ if [[ "$OS" == "mac" ]]; then
     neovim \
     coreutils \
     gh \
+    git-delta \
+    tldr \
     lazygit \
     lazydocker
 elif [[ "$OS" == "linux" ]]; then
@@ -59,6 +61,8 @@ elif [[ "$OS" == "linux" ]]; then
     fd-find \
     fzf \
     gh \
+    git-delta \
+    tldr \
     neovim
 
   # fastfetch — from PPA
@@ -121,6 +125,15 @@ echo "==> Linking dotfiles..."
 
 ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
+
+# ── Configure git-delta ──────────────────────────────────────────────────────
+if command -v delta &>/dev/null; then
+  git config --global core.pager "delta"
+  git config --global interactive.diffFilter "delta --color-only"
+  git config --global delta.navigate true
+  git config --global delta.light false
+  git config --global merge.conflictStyle zdiff3
+fi
 
 # ── Set zsh as default shell (Mac) ──────────────────────────────────────────
 if [[ "$OS" == "mac" ]] && [[ "$SHELL" != "$(command -v zsh)" ]]; then

@@ -20,8 +20,9 @@ cd zsh-setup
 
 The script handles everything automatically:
 - Installs Oh My Zsh + Powerlevel10k theme
-- Installs CLI tools (`eza`, `bat`, `fd`, `fzf`, `fastfetch`, `zoxide`, `neovim`, `gh`, `lazygit`, `lazydocker`)
+- Installs CLI tools (`eza`, `bat`, `fd`, `fzf`, `fastfetch`, `zoxide`, `neovim`, `gh`, `git-delta`, `tldr`, `lazygit`, `lazydocker`)
 - Installs `zsh-autosuggestions`, `zsh-syntax-highlighting`, and `nvm`
+- Configures `git-delta` as the default pager for syntax-highlighted diffs
 - Symlinks `.zshrc` and `.p10k.zsh`
 - Sets zsh as default shell (macOS)
 
@@ -33,8 +34,10 @@ The script handles everything automatically:
 | **Plugins** | git, docker, npm, node, gh, zoxide, extract, colored-man-pages, sudo, web-search, command-not-found, dirhistory |
 | **History** | 50K lines, dedup, append, share across sessions |
 | **Completions** | Menu selection, case-insensitive matching |
-| **Aliases** | `ls` → `eza --classify`, `lt` → tree view, `ff` → fzf preview, `g` → git, `d` → docker |
+| **Aliases** | `ls` → `eza --classify`, `lt` → tree view, `ff` → fzf + bat preview, `g` → git, `d` → docker |
 | **Utilities** | zoxide (smart `cd`), autosuggestions, syntax highlighting |
+| **fzf** | `Ctrl+R` fuzzy history search, `Ctrl+T` fuzzy file search, `Alt+C` fuzzy cd |
+| **Git** | `git-delta` pager with syntax-highlighted diffs, `git` plugin completions |
 | **System info** | `fastfetch` on interactive shell start |
 | **Portable** | Auto-detects Mac vs Linux paths and tool names |
 
