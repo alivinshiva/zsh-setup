@@ -1,34 +1,41 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ─── zsh-setup ──────────────────────────────────────────────────────────────
-# Installs Oh My Zsh + Powerlevel10k + plugins + dotfiles on a fresh Mac/Linux
-# ──────────────────────────────────────────────────────────────────────────────
+REPO_URL="https://github.com/alivinshiva/zsh-setup.git"
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# ── Detect mode: piped via curl or run locally ──────────────────────────────
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd 2>/dev/null || true)"
+if [[ -f "$SCRIPT_DIR/.zshrc" ]]; then
+  DOTFILES_DIR="$SCRIPT_DIR"
+else
+  echo "==> Downloading dotfiles from $REPO_URL"
+  DOTFILES_DIR="$(mktemp -d)"
+  git clone --depth=1 "$REPO_URL" "$DOTFILES_DIR"
+fi
 
 echo "==> Installing zsh setup from $DOTFILES_DIR"
 
 # ── Detect platform ──────────────────────────────────────────────────────────
 if [[ "$(uname)" == "Darwin" ]]; then
   OS="mac"
-  # Ensure Homebrew
   if ! command -v brew &>/dev/null; then
     echo "==> Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # Ensure brew is on PATH for Apple Silicon
+    if [[ -f /opt/homebrew/bin/brew ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
   fi
 else
   OS="linux"
 fi
 
 # ── Install tools ────────────────────────────────────────────────────────────
-echo "==> Installing tools..."
-
 if [[ "$OS" == "mac" ]]; then
+  echo "==> Installing tools via Homebrew..."
   brew install \
     zsh-autosuggestions \
     zsh-syntax-highlighting \
-    powerlevel10k \
     zoxide \
     eza \
     bat \
@@ -40,9 +47,19 @@ if [[ "$OS" == "mac" ]]; then
     lazygit \
     lazydocker
 elif [[ "$OS" == "linux" ]]; then
-  echo "Linux detected — skipping brew installs."
-  echo "Make sure these are installed via your package manager:"
-  echo "  zsh-autosuggestions zsh-syntax-highlighting zoxide eza bat fdfind fzf fastfetch neovim lazygit lazydocker"
+  echo "==> Installing tools via apt..."
+  sudo apt update -qq
+  sudo apt install -y \
+    zsh-autosuggestions \
+    zsh-syntax-highlighting \
+    zoxide \
+    eza \
+    bat \
+    fdfind \
+    fzf \
+    fastfetch \
+    neovim \
+    lazygit
 fi
 
 # ── Install Oh My Zsh ────────────────────────────────────────────────────────
@@ -62,27 +79,8 @@ else
   echo "==> Powerlevel10k already installed"
 fi
 
-# ── Install OMZ plugins (custom, not built-in) ──────────────────────────────
-install_omz_plugin() {
-  local name="$1"
-  local url="$2"
-  local dest="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/$name"
-  if [[ ! -d "$dest" ]]; then
-    echo "==> Installing OMZ plugin: $name"
-    git clone --depth=1 "$url" "$dest"
-  else
-    echo "==> OMZ plugin $name already installed"
-  fi
-}
-
-# Built-in plugins (git, docker, npm, node, gh, zoxide, extract, etc.) ship
-# with Oh My Zsh — no extra install needed. Only custom plugins below:
-# (none currently required — all our plugins are OMZ built-ins)
-
 # ── Link dotfiles ────────────────────────────────────────────────────────────
 echo "==> Linking dotfiles..."
-
-# Backup existing
 [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]] && mv "$HOME/.zshrc" "$HOME/.zshrc.backup"
 [[ -f "$HOME/.p10k.zsh" && ! -L "$HOME/.p10k.zsh" ]] && mv "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.backup"
 
@@ -90,11 +88,9 @@ ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
 
 # ── Set zsh as default shell (Mac) ──────────────────────────────────────────
-if [[ "$OS" == "mac" ]]; then
-  if [[ "$SHELL" != "$(which zsh)" ]]; then
-    echo "==> Setting zsh as default shell..."
-    chsh -s "$(which zsh)"
-  fi
+if [[ "$OS" == "mac" ]] && [[ "$SHELL" != "$(command -v zsh)" ]]; then
+  echo "==> Setting zsh as default shell..."
+  chsh -s "$(command -v zsh)"
 fi
 
 echo ""
