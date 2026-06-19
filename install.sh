@@ -44,6 +44,7 @@ if [[ "$OS" == "mac" ]]; then
     fastfetch \
     neovim \
     coreutils \
+    gh \
     lazygit \
     lazydocker
 elif [[ "$OS" == "linux" ]]; then
@@ -58,6 +59,7 @@ elif [[ "$OS" == "linux" ]]; then
     fdfind \
     fzf \
     fastfetch \
+    gh \
     neovim \
     lazygit
 fi
@@ -77,6 +79,14 @@ if [[ ! -d "$P10K_DIR" ]]; then
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
 else
   echo "==> Powerlevel10k already installed"
+fi
+
+# ── Install NVM (Node Version Manager) ──────────────────────────────────────
+if [[ ! -d "$HOME/.nvm" ]]; then
+  echo "==> Installing NVM..."
+  curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+else
+  echo "==> NVM already installed"
 fi
 
 # ── Link dotfiles ────────────────────────────────────────────────────────────

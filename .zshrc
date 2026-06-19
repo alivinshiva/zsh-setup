@@ -3,7 +3,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export PATH="$HOME/.opencode/bin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
@@ -97,9 +96,27 @@ if [[ "$(uname)" == "Darwin" ]]; then
   alias gcam='git commit -a -m'
   alias gcad='git commit -a --amend'
 else
-  # Linux — source omakub aliases if they exist, otherwise define equivalents
+  # Linux aliases
   if [[ -f "$HOME/.local/share/omakub/defaults/bash/aliases" ]]; then
     source "$HOME/.local/share/omakub/defaults/bash/aliases"
+  else
+    alias ls='eza -lh --group-directories-first --icons=auto --classify'
+    alias lsa='ls -a'
+    alias lt='eza --tree --level=2 --long --icons --git --classify'
+    alias lta='lt -a'
+    alias ff="fzf --preview 'batcat --style=numbers --color=always {}'"
+    alias fd='fdfind'
+    alias bat='batcat'
+    alias cd='z'
+    alias ..='cd ..'
+    alias ...='cd ../..'
+    alias ....='cd ../../..'
+    n() { if [ "$#" -eq 0 ]; then nvim .; else nvim "$@"; fi; }
+    alias g='git'
+    alias d='docker'
+    alias gcm='git commit -m'
+    alias gcam='git commit -a -m'
+    alias gcad='git commit -a --amend'
   fi
 fi
 
