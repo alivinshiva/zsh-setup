@@ -20,8 +20,8 @@ cd zsh-setup
 
 The script handles everything automatically:
 - Installs Oh My Zsh + Powerlevel10k theme
-- Installs CLI tools (`eza`, `bat`, `fd`, `fzf`, `fastfetch`, `zoxide`, `neovim`, `lazygit`, `lazydocker`)
-- Installs `zsh-autosuggestions` and `zsh-syntax-highlighting`
+- Installs CLI tools (`eza`, `bat`, `fd`, `fzf`, `fastfetch`, `zoxide`, `neovim`, `gh`, `lazygit`, `lazydocker`)
+- Installs `zsh-autosuggestions`, `zsh-syntax-highlighting`, and `nvm`
 - Symlinks `.zshrc` and `.p10k.zsh`
 - Sets zsh as default shell (macOS)
 
