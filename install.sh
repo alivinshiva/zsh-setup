@@ -56,12 +56,37 @@ elif [[ "$OS" == "linux" ]]; then
     zoxide \
     eza \
     bat \
-    fdfind \
+    fd-find \
     fzf \
-    fastfetch \
     gh \
-    neovim \
-    lazygit
+    neovim
+
+  # fastfetch — from PPA
+  if ! command -v fastfetch &>/dev/null; then
+    sudo add-apt-repository ppa:zhangsongcui3371/fastfetch -y
+    sudo apt update -qq
+    sudo apt install -y fastfetch
+  fi
+
+  # lazygit — from GitHub releases
+  if ! command -v lazygit &>/dev/null; then
+    LAZYGIT_VERSION=$(curl -s https://api.github.com/repos/jesseduffield/lazygit/releases/latest \
+      | grep -Po '"tag_name": *"v\K[^"]*')
+    curl -Lo /tmp/lazygit.tar.gz \
+      "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf /tmp/lazygit.tar.gz -C /tmp lazygit
+    sudo install /tmp/lazygit /usr/local/bin
+  fi
+
+  # lazydocker — from GitHub releases
+  if ! command -v lazydocker &>/dev/null; then
+    LAZYD_VERSION=$(curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest \
+      | grep -Po '"tag_name": *"v\K[^"]*')
+    curl -Lo /tmp/lazydocker.tar.gz \
+      "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYD_VERSION}_Linux_x86_64.tar.gz"
+    tar xf /tmp/lazydocker.tar.gz -C /tmp lazydocker
+    sudo install /tmp/lazydocker /usr/local/bin
+  fi
 fi
 
 # ── Install Oh My Zsh ────────────────────────────────────────────────────────
