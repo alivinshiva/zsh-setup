@@ -79,9 +79,9 @@ source $ZSH/oh-my-zsh.sh
 # Platform-specific aliases
 if [[ "$(uname)" == "Darwin" ]]; then
   # Mac uses different names for some tools via brew
-  alias ls='eza -lh --group-directories-first --icons=auto'
+  alias ls='eza -lh --group-directories-first --icons=auto --classify'
   alias lsa='ls -a'
-  alias lt='eza --tree --level=2 --long --icons --git'
+  alias lt='eza --tree --level=2 --long --icons --git --classify'
   alias lta='lt -a'
   alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
   alias fd='fd'
