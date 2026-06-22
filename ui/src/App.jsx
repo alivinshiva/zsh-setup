@@ -3,6 +3,18 @@ import './App.css'
 
 const chars = ['$', '_', '>', '~', '#', '%', '&', '|', '/', '\\', '=', '@', '!', '?', '*']
 const colors = ['#00d4ff', '#00ff88', '#ffd700', '#ff66cc', '#ff8844', '#aa66ff', '#ff4466', '#44aaff', '#66ff99', '#ffaa33', '#33ccff', '#ff5599', '#88ff66', '#dd88ff', '#ff9966']
+const anims = ['float-up', 'float-down', 'float-drift-l', 'float-drift-r', 'float-diag']
+
+const floating = chars.map((c, i) => ({
+  char: c,
+  color: colors[i],
+  left: Math.random() * 85 + 5,
+  top: Math.random() * 100,
+  anim: anims[Math.floor(Math.random() * anims.length)],
+  delay: Math.random() * 14,
+  duration: Math.random() * 18 + 14,
+  size: Math.random() * 12 + 12,
+}))
 
 const features = [
   { title: 'Powerlevel10k', desc: 'Classic prompt style with git status, execution time, virtualenv, and more.' },
@@ -44,8 +56,8 @@ function App() {
   return (
     <>
       <div className="terminal-bg" aria-hidden="true">
-        {chars.map((c, i) => (
-          <span key={i} style={{ left: `${5 + i * 6.5}%`, animationDelay: `${i * 0.7}s`, animationDuration: `${16 + i * 1.5}s`, color: colors[i] }}>{c}</span>
+        {floating.map((f, i) => (
+          <span key={i} style={{ left: `${f.left}%`, top: `${f.top}%`, animationName: f.anim, animationDelay: `${f.delay}s`, animationDuration: `${f.duration}s`, color: f.color, fontSize: `${f.size}px` }}>{f.char}</span>
         ))}
       </div>
 
