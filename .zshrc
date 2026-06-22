@@ -150,9 +150,10 @@ fi
 # zsh-syntax-highlighting — must be loaded last
 [[ -f "$ZSH_SYNTAX_HIGHLIGHTING_PATH" ]] && source "$ZSH_SYNTAX_HIGHLIGHTING_PATH"
 
-# Show system info on startup.
-if [[ -o interactive ]] && command -v fastfetch >/dev/null 2>&1; then
-  fastfetch
+# Show system info on first prompt (avoids p10k instant prompt warning).
+if command -v fastfetch >/dev/null 2>&1; then
+  _ff() { fastfetch; precmd_functions=("${(@)precmd_functions:#_ff}"); }
+  precmd_functions+=(_ff)
 fi
 
 export NVM_DIR="$HOME/.nvm"
