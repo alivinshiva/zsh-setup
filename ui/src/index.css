@@ -34,7 +34,9 @@
   --code-header: #f0f0f0;
   --footer-text: #8a8a8a;
   --btn-hover-bg: #f0f0f0;
-  --install-bg: #f7f7f7;
+  --grid-line: rgba(0,0,0,0.04);
+  --scan-line: rgba(0,0,0,0.015);
+  --float-chars: rgba(0,0,0,0.06);
 }
 
 [data-theme="dark"] {
@@ -63,22 +65,102 @@
   --code-header: #2a2a2a;
   --footer-text: #666;
   --btn-hover-bg: #2a2a2a;
-  --install-bg: #111;
+  --grid-line: rgba(255,255,255,0.03);
+  --scan-line: rgba(255,255,255,0.012);
+  --float-chars: rgba(255,255,255,0.05);
 }
 
 html {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+  font-size: 15px;
+  line-height: 1.7;
   color: var(--text);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
-  transition: background 0.2s, color 0.2s;
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--bg);
-  transition: background 0.2s;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Background: Terminal Grid ────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 32px 32px;
+  animation: grid-pulse 8s ease-in-out infinite;
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ── Background: CRT Scan Lines ───────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    var(--scan-line) 0px,
+    var(--scan-line) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* ── Floating Terminal Characters ─────────────────────────────── */
+.terminal-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  color: var(--float-chars);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.terminal-bg span {
+  position: absolute;
+  animation: float-up linear infinite;
+  opacity: 0;
+  user-select: none;
+}
+
+.terminal-bg span:nth-child(1) { left: 5%; animation-duration: 18s; animation-delay: 0s; }
+.terminal-bg span:nth-child(2) { left: 15%; animation-duration: 22s; animation-delay: 2s; }
+.terminal-bg span:nth-child(3) { left: 25%; animation-duration: 16s; animation-delay: 4s; }
+.terminal-bg span:nth-child(4) { left: 35%; animation-duration: 20s; animation-delay: 1s; }
+.terminal-bg span:nth-child(5) { left: 45%; animation-duration: 19s; animation-delay: 5s; }
+.terminal-bg span:nth-child(6) { left: 55%; animation-duration: 21s; animation-delay: 3s; }
+.terminal-bg span:nth-child(7) { left: 65%; animation-duration: 17s; animation-delay: 6s; }
+.terminal-bg span:nth-child(8) { left: 75%; animation-duration: 23s; animation-delay: 0.5s; }
+.terminal-bg span:nth-child(9) { left: 85%; animation-duration: 15s; animation-delay: 3.5s; }
+.terminal-bg span:nth-child(10) { left: 92%; animation-duration: 20s; animation-delay: 7s; }
+.terminal-bg span:nth-child(11) { left: 10%; animation-duration: 25s; animation-delay: 8s; }
+.terminal-bg span:nth-child(12) { left: 50%; animation-duration: 14s; animation-delay: 2.5s; }
+.terminal-bg span:nth-child(13) { left: 70%; animation-duration: 19s; animation-delay: 6.5s; }
+.terminal-bg span:nth-child(14) { left: 30%; animation-duration: 24s; animation-delay: 1.5s; }
+.terminal-bg span:nth-child(15) { left: 60%; animation-duration: 16s; animation-delay: 4.5s; }
+
+@keyframes float-up {
+  0% { transform: translateY(100vh); opacity: 0; }
+  5% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
 }
 
 code, pre {
