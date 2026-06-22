@@ -107,6 +107,18 @@ else
   echo "==> Powerlevel10k already installed"
 fi
 
+# ── Fastfetch theme prompt ────────────────────────────────────────────────────
+if command -v fastfetch &>/dev/null; then
+  echo ""
+  echo "==> Choose your fastfetch theme:"
+  echo ""
+  echo "  1) Full    — detailed system info with colored sections"
+  echo "  2) Compact — minimal, clean, single-line entries"
+  echo ""
+  read -p "  Select theme [1/2] (default: 1): " FASTFETCH_CHOICE
+  FASTFETCH_CHOICE="${FASTFETCH_CHOICE:-1}"
+fi
+
 # ── Install NVM (Node Version Manager) ──────────────────────────────────────
 if [[ ! -d "$HOME/.nvm" ]]; then
   echo "==> Installing NVM..."
@@ -130,6 +142,21 @@ if [[ ! -d "$YSU_DIR" ]]; then
   git clone --depth=1 https://github.com/MichaelAquilina/zsh-you-should-use.git "$YSU_DIR"
 else
   echo "==> you-should-use already installed"
+fi
+
+# ── Fastfetch config ──────────────────────────────────────────────────────────
+if command -v fastfetch &>/dev/null; then
+  mkdir -p "$HOME/.config/fastfetch"
+  case "$FASTFETCH_CHOICE" in
+    2)
+      cp "$DOTFILES_DIR/config/fastfetch/config-compact.jsonc" "$HOME/.config/fastfetch/config.jsonc"
+      echo "   → fastfetch: compact theme"
+      ;;
+    *)
+      cp "$DOTFILES_DIR/config/fastfetch/config-full.jsonc" "$HOME/.config/fastfetch/config.jsonc"
+      echo "   → fastfetch: full theme"
+      ;;
+  esac
 fi
 
 # ── Link dotfiles ────────────────────────────────────────────────────────────

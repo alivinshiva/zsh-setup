@@ -1,0 +1,170 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "auto",
+    "padding": {
+      "top": 1,
+      "right": 1
+    },
+    "preserveAspectRatio": true
+  },
+  "display": {
+    "color": {
+      "keys": "cyan"
+    },
+    "separator": "",
+    "constants": [
+      "──────────────────────────────────────────────────────",
+      "\u001b[55D",
+      "\u001b[55C",
+      "\u001b[54C"
+    ],
+    "brightColor": true
+  },
+  "modules": [
+    "break",
+    {
+      "type": "custom",
+      "key": "┌────────────┬─{$1}┐\u001b[37D",
+      "format": "\u001b[1m{#keys}"
+    },
+    {
+      "type": "os",
+      "key": "│ 󰍹 \u001b[s{sysname}\u001b[u\u001b[9C│{$3}│{$2}"
+    },
+    {
+      "type": "kernel",
+      "key": "│ 󰒋 \u001b[sKernel\u001b[u\u001b[9C│{$3}│{$2}"
+    },
+    {
+      "type": "datetime",
+      "key": "│ 󰅐 Fetched  │{$3}│{$2}",
+      "format": "{day-pretty}-{month-pretty}-{year} {hour-pretty}:{minute-pretty}:{second-pretty} {timezone-name}"
+    },
+    {
+      "type": "locale",
+      "key": "│ 󰊄 Locale   │{$3}│{$2}"
+    },
+    {
+      "type": "custom",
+      "key": "├────────────┴─{$1}┤",
+      "format": ""
+    },
+    {
+      "type": "custom",
+      "key": "│{#white}┌───────────┬{$1}┐{#keys}│\u001b[37D",
+      "format": "{#bright_white} Hardware "
+    },
+    {
+      "type": "chassis",
+      "key": "│{#white}│ 󰇅 Chassis │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "cpu",
+      "key": "│{#white}│  CPU     │{$4}│{#keys}│{$2}",
+      "format": "{name} @{freq-max}",
+      "showPeCoreCount": false
+    },
+    {
+      "type": "gpu",
+      "key": "│{#white}│ 󰍹 GPU     │{$4}│{#keys}│{$2}",
+      "format": "{2}"
+    },
+    {
+      "type": "memory",
+      "key": "│{#white}│ 󰍛 RAM     │{$4}│{#keys}│{$2}",
+      "percent": { "type": 3, "green": 30, "yellow": 70 }
+    },
+    {
+      "type": "disk",
+      "key": "│{#white}│ 󰋊 Disk    │{$4}│{#keys}│{$2}",
+      "percent": { "type": 3, "green": 30, "yellow": 70 }
+    },
+    {
+      "type": "battery",
+      "key": "│{#white}│ Battery   │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "custom",
+      "key": "│{#white}└───────────┴{$1}┘{#keys}│",
+      "format": ""
+    },
+    {
+      "type": "custom",
+      "key": "│{#green}┌───────────┬{$1}┐{#keys}│\u001b[37D",
+      "format": "{#bright_green} Desktop "
+    },
+    {
+      "type": "de",
+      "key": "│{#green}│ Desktop   │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "wm",
+      "key": "│{#green}│ Session   │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "display",
+      "key": "│{#green}│ Display   │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "custom",
+      "key": "│{#green}└───────────┴{$1}┘{#keys}│",
+      "format": ""
+    },
+    {
+      "type": "custom",
+      "key": "│{#yellow}┌───────────┬{$1}┐{#keys}│\u001b[37D",
+      "format": "{#bright_yellow} Terminal "
+    },
+    {
+      "type": "shell",
+      "key": "│{#yellow}│ Shell     │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "terminal",
+      "key": "│{#yellow}│ Terminal  │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "terminalfont",
+      "key": "│{#yellow}│ Term Font │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "packages",
+      "key": "│{#yellow}│ Packages  │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "custom",
+      "key": "│{#yellow}└───────────┴{$1}┘{#keys}│",
+      "format": ""
+    },
+    {
+      "type": "custom",
+      "key": "│{#magenta}┌───────────┬{$1}┐{#keys}│\u001b[37D",
+      "format": "{#bright_magenta} Uptime "
+    },
+    {
+      "type": "uptime",
+      "key": "│{#magenta}│ 󰅐 Uptime  │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "localip",
+      "key": "│{#magenta}│ 󰩟 IP      │{$4}│{#keys}│{$2}"
+    },
+    {
+      "type": "custom",
+      "key": "│{#magenta}└───────────┴{$1}┘{#keys}│",
+      "format": ""
+    },
+    {
+      "type": "custom",
+      "key": "│ {$3}            │{$2}",
+      "format": "     {#37}󰮯 {#37} • {#37}• {#37}• {#31} 󰊠 {#32} 󰊠 {#33} 󰊠 {#34} 󰊠 {#35} 󰊠 {#36} 󰊠"
+    },
+    {
+      "type": "custom",
+      "key": "└──────────────{$1}┘",
+      "format": ""
+    },
+    "break"
+  ]
+}
