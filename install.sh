@@ -2,6 +2,14 @@
 set -euo pipefail
 
 REPO_URL="https://github.com/alivinshiva/zsh-setup.git"
+MINIMAL=false
+
+# ── Parse flags ──────────────────────────────────────────────────────────────
+for arg in "$@"; do
+  case "$arg" in
+    --minimal) MINIMAL=true ;;
+  esac
+done
 
 # ── Detect mode: piped via curl or run locally ──────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd 2>/dev/null || true)"
@@ -31,65 +39,54 @@ else
 fi
 
 # ── Install tools ────────────────────────────────────────────────────────────
+CORE_TOOLS="zsh-autosuggestions zsh-syntax-highlighting zoxide eza bat fd fzf gh neovim"
+EXTRA_TOOLS="fastfetch git-delta tldr lazygit lazydocker"
+
+if $MINIMAL; then
+  TOOLS="$CORE_TOOLS"
+  echo "==> Minimal mode: installing only core tools"
+else
+  TOOLS="$CORE_TOOLS $EXTRA_TOOLS"
+  echo "==> Installing all tools..."
+fi
+
 if [[ "$OS" == "mac" ]]; then
-  echo "==> Installing tools via Homebrew..."
-  brew install \
-    zsh-autosuggestions \
-    zsh-syntax-highlighting \
-    zoxide \
-    eza \
-    bat \
-    fd \
-    fzf \
-    fastfetch \
-    neovim \
-    coreutils \
-    gh \
-    git-delta \
-    tldr \
-    lazygit \
-    lazydocker
+  # coreutils is always useful on mac
+  brew install $TOOLS coreutils
 elif [[ "$OS" == "linux" ]]; then
   echo "==> Installing tools via apt..."
+  # Translate tool names for Linux
+  APT_TOOLS="zsh-autosuggestions zsh-syntax-highlighting zoxide eza bat fd-find fzf gh git-delta tldr neovim"
   sudo apt update -qq
-  sudo apt install -y \
-    zsh-autosuggestions \
-    zsh-syntax-highlighting \
-    zoxide \
-    eza \
-    bat \
-    fd-find \
-    fzf \
-    gh \
-    git-delta \
-    tldr \
-    neovim
+  sudo apt install -y $APT_TOOLS
 
-  # fastfetch — from PPA
-  if ! command -v fastfetch &>/dev/null; then
-    sudo add-apt-repository ppa:zhangsongcui3371/fastfetch -y
-    sudo apt update -qq
-    sudo apt install -y fastfetch
-  fi
+  if ! $MINIMAL; then
+    # fastfetch — from PPA
+    if ! command -v fastfetch &>/dev/null; then
+      sudo add-apt-repository ppa:zhangsongcui3371/fastfetch -y
+      sudo apt update -qq
+      sudo apt install -y fastfetch
+    fi
 
-  # lazygit — from GitHub releases
-  if ! command -v lazygit &>/dev/null; then
-    LAZYGIT_VERSION=$(curl -s https://api.github.com/repos/jesseduffield/lazygit/releases/latest \
-      | grep -Po '"tag_name": *"v\K[^"]*')
-    curl -Lo /tmp/lazygit.tar.gz \
-      "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-    tar xf /tmp/lazygit.tar.gz -C /tmp lazygit
-    sudo install /tmp/lazygit /usr/local/bin
-  fi
+    # lazygit — from GitHub releases
+    if ! command -v lazygit &>/dev/null; then
+      LAZYGIT_VERSION=$(curl -s https://api.github.com/repos/jesseduffield/lazygit/releases/latest \
+        | grep -Po '"tag_name": *"v\K[^"]*')
+      curl -Lo /tmp/lazygit.tar.gz \
+        "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+      tar xf /tmp/lazygit.tar.gz -C /tmp lazygit
+      sudo install /tmp/lazygit /usr/local/bin
+    fi
 
-  # lazydocker — from GitHub releases
-  if ! command -v lazydocker &>/dev/null; then
-    LAZYD_VERSION=$(curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest \
-      | grep -Po '"tag_name": *"v\K[^"]*')
-    curl -Lo /tmp/lazydocker.tar.gz \
-      "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYD_VERSION}_Linux_x86_64.tar.gz"
-    tar xf /tmp/lazydocker.tar.gz -C /tmp lazydocker
-    sudo install /tmp/lazydocker /usr/local/bin
+    # lazydocker — from GitHub releases
+    if ! command -v lazydocker &>/dev/null; then
+      LAZYD_VERSION=$(curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest \
+        | grep -Po '"tag_name": *"v\K[^"]*')
+      curl -Lo /tmp/lazydocker.tar.gz \
+        "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYD_VERSION}_Linux_x86_64.tar.gz"
+      tar xf /tmp/lazydocker.tar.gz -C /tmp lazydocker
+      sudo install /tmp/lazydocker /usr/local/bin
+    fi
   fi
 fi
 
@@ -118,6 +115,23 @@ else
   echo "==> NVM already installed"
 fi
 
+# ── Install fnm (Fast Node Manager) ─────────────────────────────────────────
+if ! command -v fnm &>/dev/null; then
+  echo "==> Installing fnm..."
+  curl -fsSL https://fnm.vercel.app/install | bash
+else
+  echo "==> fnm already installed"
+fi
+
+# ── Install you-should-use plugin ──────────────────────────────────────────
+YSU_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/you-should-use"
+if [[ ! -d "$YSU_DIR" ]]; then
+  echo "==> Installing you-should-use plugin..."
+  git clone --depth=1 https://github.com/MichaelAquilina/zsh-you-should-use.git "$YSU_DIR"
+else
+  echo "==> you-should-use already installed"
+fi
+
 # ── Link dotfiles ────────────────────────────────────────────────────────────
 echo "==> Linking dotfiles..."
 [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]] && mv "$HOME/.zshrc" "$HOME/.zshrc.backup"
@@ -144,3 +158,4 @@ fi
 echo ""
 echo "✅ Done! Restart your terminal or run: source ~/.zshrc"
 echo "   To customize prompt later: p10k configure"
+echo "   Run with --minimal to skip optional tools (fastfetch, lazygit, lazydocker, git-delta, tldr)"

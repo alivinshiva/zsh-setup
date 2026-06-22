@@ -58,7 +58,18 @@ plugins=(
   web-search
   command-not-found
   dirhistory
+  history-substring-search
+  you-should-use
 )
+
+# history-substring-search key bindings (↑↓ to search by typed prefix)
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
+
+# mkcd — create directory and cd into it
+mkcd() { mkdir -p "$1" && cd "$1"; }
 
 # Better completion behavior.
 setopt AUTO_CD
@@ -100,6 +111,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
   alias gcm='git commit -m'
   alias gcam='git commit -a -m'
   alias gcad='git commit -a --amend'
+  alias lg='lazygit'
+  alias ld='lazydocker'
 else
   # Linux aliases
   if [[ -f "$HOME/.local/share/omakub/defaults/bash/aliases" ]]; then
@@ -122,6 +135,8 @@ else
     alias gcm='git commit -m'
     alias gcam='git commit -a -m'
     alias gcad='git commit -a --amend'
+    alias lg='lazygit'
+    alias ld='lazydocker'
   fi
 fi
 
@@ -143,3 +158,8 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# fnm (Fast Node Manager) — faster alternative to NVM
+if command -v fnm &>/dev/null; then
+  eval "$(fnm env --use-on-cd --shell zsh)"
+fi
