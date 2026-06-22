@@ -41,6 +41,10 @@ The script handles everything automatically:
 | **System info** | `fastfetch` on interactive shell start |
 | **Portable** | Auto-detects Mac vs Linux paths and tool names |
 
+## Troubleshooting
+
+See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for fixes to common issues — config overwrites, missing tools, theme problems, and more.
+
 ## Customize
 
 ```sh
