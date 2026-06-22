@@ -49,3 +49,11 @@ p10k configure
 ```
 
 Edit `~/.zshrc` or `~/.p10k.zsh` directly to fine-tune.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on reporting bugs, suggesting features, and submitting PRs.
+
+## Website
+
+A showcase site is available in the [`ui/`](ui) directory — a Vite + React app with a light/dark theme.
