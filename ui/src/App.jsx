@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 const chars = ['$', '_', '>', '~', '#', '%', '&', '|', '/', '\\', '=', '@', '!', '?', '*']
+const colors = ['#00d4ff', '#00ff88', '#ffd700', '#ff66cc', '#ff8844', '#aa66ff', '#ff4466', '#44aaff', '#66ff99', '#ffaa33', '#33ccff', '#ff5599', '#88ff66', '#dd88ff', '#ff9966']
 
 const features = [
   { title: 'Powerlevel10k', desc: 'Classic prompt style with git status, execution time, virtualenv, and more.' },
@@ -24,9 +25,9 @@ const testimonials = [
 function App() {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('zsh-theme') || 'light'
+      return localStorage.getItem('zsh-theme') || 'dark'
     }
-    return 'light'
+    return 'dark'
   })
 
   useEffect(() => {
@@ -44,7 +45,7 @@ function App() {
     <>
       <div className="terminal-bg" aria-hidden="true">
         {chars.map((c, i) => (
-          <span key={i} style={{ left: `${5 + i * 6.5}%`, animationDelay: `${i * 0.7}s`, animationDuration: `${16 + i * 1.5}s` }}>{c}</span>
+          <span key={i} style={{ left: `${5 + i * 6.5}%`, animationDelay: `${i * 0.7}s`, animationDuration: `${16 + i * 1.5}s`, color: colors[i] }}>{c}</span>
         ))}
       </div>
 
