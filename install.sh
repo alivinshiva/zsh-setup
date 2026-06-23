@@ -13,10 +13,10 @@ done
 
 # ── Detect mode: piped via curl or run locally ──────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd 2>/dev/null || true)"
-# Only use local files if the script is actually being run from a local file
-# (not piped via curl where BASH_SOURCE is empty and $0 is "bash" or "zsh")
-if [[ -n "${BASH_SOURCE[0]}" && "${BASH_SOURCE[0]}" != "$0" && -f "$SCRIPT_DIR/.zshrc" ]] || \
-   [[ -f "$SCRIPT_DIR/install.sh" && -f "$SCRIPT_DIR/.zshrc" ]]; then
+# When run via "bash -c \"\$(curl ...)\"", BASH_SOURCE is unreliable and $0
+# is "bash". In that case, always clone. When running install.sh directly
+# from a local clone, SCRIPT_DIR will contain .zshrc and install.sh.
+if [[ -f "$SCRIPT_DIR/install.sh" && -f "$SCRIPT_DIR/.zshrc" && "$SCRIPT_DIR" != "$HOME" ]]; then
   DOTFILES_DIR="$SCRIPT_DIR"
   echo "==> Running from local copy at $DOTFILES_DIR"
 else
