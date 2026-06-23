@@ -12,13 +12,11 @@ for arg in "$@"; do
 done
 
 # ── Detect mode: piped via curl or run locally ──────────────────────────────
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd 2>/dev/null || true)"
-# When run via "bash -c \"\$(curl ...)\"", BASH_SOURCE is unreliable and $0
-# is "bash". In that case, always clone. When running install.sh directly
-# from a local clone, SCRIPT_DIR will contain .zshrc and install.sh.
-if [[ -f "$SCRIPT_DIR/install.sh" && -f "$SCRIPT_DIR/.zshrc" && "$SCRIPT_DIR" != "$HOME" ]]; then
-  DOTFILES_DIR="$SCRIPT_DIR"
-  echo "==> Running from local copy at $DOTFILES_DIR"
+# When run via "bash -c \"\$(curl ...)\"", we always need to clone.
+# Only use local files when explicitly passed --local or running within the repo.
+if [[ -f "install.sh" && -f ".zshrc" && "$(pwd)" != "$HOME" ]]; then
+  DOTFILES_DIR="$(pwd)"
+  echo "==> Running from local copy"
 else
   echo "==> Downloading dotfiles from $REPO_URL"
   DOTFILES_DIR="$(mktemp -d)"
