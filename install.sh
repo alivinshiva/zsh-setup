@@ -129,6 +129,15 @@ fi
 
 # ── Install fnm (Fast Node Manager) ─────────────────────────────────────────
 if ! command -v fnm &>/dev/null; then
+  # fnm installer needs curl and unzip
+  if ! command -v unzip &>/dev/null; then
+    echo "==> Installing unzip (required for fnm)..."
+    if [[ "$OS" == "mac" ]]; then
+      brew install unzip
+    else
+      sudo apt install -y unzip
+    fi
+  fi
   echo "==> Installing fnm..."
   curl -fsSL https://fnm.vercel.app/install | bash
 else
