@@ -129,17 +129,28 @@ fi
 
 # ── Install fnm (Fast Node Manager) ─────────────────────────────────────────
 if ! command -v fnm &>/dev/null; then
-  # fnm installer needs curl and unzip
-  if ! command -v unzip &>/dev/null; then
-    echo "==> Installing unzip (required for fnm)..."
-    if [[ "$OS" == "mac" ]]; then
-      brew install unzip
+  if command -v node &>/dev/null; then
+    echo "==> Node.js detected, skipping fnm installation"
+  else
+    echo ""
+    echo "==> Node.js is not installed."
+    read -p "    Install fnm (Fast Node Manager) for Node.js version management? [y/N] " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      if ! command -v unzip &>/dev/null; then
+        echo "==> Installing unzip (required for fnm)..."
+        if [[ "$OS" == "mac" ]]; then
+          brew install unzip
+        else
+          sudo apt install -y unzip
+        fi
+      fi
+      echo "==> Installing fnm..."
+      curl -fsSL https://fnm.vercel.app/install | bash
     else
-      sudo apt install -y unzip
+      echo "==> Skipping fnm installation"
     fi
   fi
-  echo "==> Installing fnm..."
-  curl -fsSL https://fnm.vercel.app/install | bash
 else
   echo "==> fnm already installed"
 fi
