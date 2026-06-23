@@ -44,12 +44,33 @@ fi
 CORE_TOOLS="zsh-autosuggestions zsh-syntax-highlighting zoxide eza bat fd fzf gh neovim"
 EXTRA_TOOLS="fastfetch git-delta tldr lazygit lazydocker"
 
+# ── Prompt install mode if not already set via flag ──────────────────────────
+if ! $MINIMAL; then
+  echo ""
+  echo "==> Choose installation mode:"
+  echo ""
+  echo "  1) Full     — install everything (default)"
+  echo "   Core: zsh-autosuggestions, zsh-syntax-highlighting, zoxide,"
+  echo "          eza, bat, fd, fzf, gh, neovim"
+  echo "   Extra: fastfetch, git-delta, tldr, lazygit, lazydocker"
+  echo ""
+  echo "  2) Minimal  — only core tools, skip optional ones"
+  echo "   Core: zsh-autosuggestions, zsh-syntax-highlighting, zoxide,"
+  echo "          eza, bat, fd, fzf, gh, neovim"
+  echo ""
+  read -p "  Select mode [1/2] (default: 1): " MODE_CHOICE
+  echo ""
+  if [[ "$MODE_CHOICE" == "2" ]]; then
+    MINIMAL=true
+  fi
+fi
+
 if $MINIMAL; then
   TOOLS="$CORE_TOOLS"
   echo "==> Minimal mode: installing only core tools"
 else
   TOOLS="$CORE_TOOLS $EXTRA_TOOLS"
-  echo "==> Installing all tools..."
+  echo "==> Full mode: installing all tools..."
 fi
 
 if [[ "$OS" == "mac" ]]; then
@@ -207,4 +228,3 @@ fi
 echo ""
 echo "✅ Done! Restart your terminal or run: source ~/.zshrc"
 echo "   To customize prompt later: p10k configure"
-echo "   Run with --minimal to skip optional tools (fastfetch, lazygit, lazydocker, git-delta, tldr)"
