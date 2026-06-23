@@ -13,8 +13,12 @@ done
 
 # ── Detect mode: piped via curl or run locally ──────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd 2>/dev/null || true)"
-if [[ -f "$SCRIPT_DIR/.zshrc" ]]; then
+# Only use local files if the script is actually being run from a local file
+# (not piped via curl where BASH_SOURCE is empty and $0 is "bash" or "zsh")
+if [[ -n "${BASH_SOURCE[0]}" && "${BASH_SOURCE[0]}" != "$0" && -f "$SCRIPT_DIR/.zshrc" ]] || \
+   [[ -f "$SCRIPT_DIR/install.sh" && -f "$SCRIPT_DIR/.zshrc" ]]; then
   DOTFILES_DIR="$SCRIPT_DIR"
+  echo "==> Running from local copy at $DOTFILES_DIR"
 else
   echo "==> Downloading dotfiles from $REPO_URL"
   DOTFILES_DIR="$(mktemp -d)"
