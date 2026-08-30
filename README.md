@@ -1,4 +1,7 @@
-# zsh-setup
+<div align="center">
+  <img src="public/logo.svg" alt="zsh-setup logo" width="120" height="120">
+  <h1>zsh-setup</h1>
+</div>
 
 Portable Oh My Zsh + Powerlevel10k configuration with cross-platform aliases, plugins, and performance tweaks. Works on **macOS** and **Linux**.
 
