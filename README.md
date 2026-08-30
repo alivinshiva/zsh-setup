@@ -75,7 +75,8 @@ Edit `~/.zshrc` or `~/.p10k.zsh` directly to fine-tune.
 
 ## Showcase
 
-- **Website**: [zsh-setup-ui](https://github.com/alivinshiva/zsh-setup-ui) — Vite + React app with TUI aesthetic, live demo, and docs
+- **Live Site**: [textboard.tech](https://www.textboard.tech/) — Interactive demo and documentation
+- **Code**: [zsh-setup-ui](https://github.com/alivinshiva/zsh-setup-ui) — Vite + React app with TUI aesthetic
 - **Badge**: Add to your README ([POWERED_BY.md](POWERED_BY.md))
 
 ## Changelog
